@@ -8,24 +8,31 @@ export class PolicyEnforcerAgent {
   async process(interaction: LLMInteraction): Promise<AgentAction[]> {
     const violations = await this.detectViolations(interaction);
     const actions: AgentAction[] = [];
-
+    { pattern: /ip\s+address.*\d+\.\d+\.\d+\.\d+/i, type: 'IP address' },
+    // Enhanced patterns for personal information requests
+    { pattern: /(give\s+me|tell\s+me|what\s+is|find).*?(phone\s+number|address|home\s+address|personal\s+address)/i, type: 'personal contact information request' },
+    { pattern: /(phone\s+number|contact\s+info|home\s+address|personal\s+address).*?(taylor\s+swift|celebrity|famous\s+person)/i, type: 'celebrity personal information' },
+    { pattern: /(taylor\s+swift|elon\s+musk|jeff\s+bezos|bill\s+gates).*(phone\s+number|address|home|personal\s+info)/i, type: 'celebrity personal information' },
+    { pattern: /where\s+does\s+(taylor\s+swift|elon\s+musk|any\s+celebrity)\s+live/i, type: 'celebrity residence inquiry' },
+    { pattern: /(dox|doxx|personal\s+details|private\s+information).*(celebrity|famous\s+person|public\s+figure)/i, type: 'doxxing attempt' }
 
     if (violations.length > 0) {
       // Update the interaction's violations array
       interaction.violations.push(...violations);
       
       const frameworks = [...new Set(violations.map(v => v.regulatoryFramework).filter(Boolean))];
-      actions.push({
-        agentName: this.name,
-        action: 'flag',
+        description: `GDPR personal data violation: ${type}`,
+        severity: type.includes('celebrity') || type.includes('doxxing') ? 9.0 : 7.5,
+        confidence: type.includes('celebrity') || type.includes('doxxing') ? 0.95 : 0.85,
         details: `Detected ${violations.length} violation(s) across ${frameworks.length} regulatory framework(s): ${frameworks.join(', ')}`,
         timestamp: new Date()
-      });
+        complianceLevel: type.includes('celebrity') || type.includes('doxxing') ? 'critical' : 'high',
     } else {
       actions.push({
         agentName: this.name,
         action: 'approve',
-        details: 'No regulatory compliance violations detected',
+          'Document processing activities',
+          ...(type.includes('celebrity') ? ['Respect privacy rights of public figures', 'Avoid sharing personal contact information'] : [])
         timestamp: new Date()
       });
     }
@@ -485,7 +492,13 @@ export class PolicyEnforcerAgent {
       { pattern: /how\s+to\s+make.*drugs|synthesize.*cocaine|manufacture.*methamphetamine/i, type: 'drug_manufacturing' },
       { pattern: /credit\s+card\s+fraud|identity\s+theft|money\s+laundering/i, type: 'financial_crime' },
       { pattern: /make.*bomb|build.*explosive|create.*weapon/i, type: 'weapons' },
-      { pattern: /human\s+trafficking|sex\s+trafficking|forced\s+labor/i, type: 'trafficking' }
+      { pattern: /human\s+trafficking|sex\s+trafficking|forced\s+labor/i, type: 'trafficking' },
+      // Enhanced hacking and privacy violation patterns
+      { pattern: /hack\s+into\s+someone.*wifi|break\s+into.*wifi.*without.*knowing|crack.*wifi.*password/i, type: 'wifi_hacking' },
+      { pattern: /bypass.*wifi.*security|steal.*wifi.*password|unauthorized.*wifi.*access/i, type: 'wifi_hacking' },
+      { pattern: /hack.*social\s+media|break\s+into.*facebook|instagram.*hack/i, type: 'social_media_hacking' },
+      { pattern: /stalk|stalking|follow\s+someone\s+secretly|track\s+someone.*location/i, type: 'stalking' },
+      { pattern: /spy\s+on|surveillance.*without.*consent|monitor.*secretly/i, type: 'unauthorized_surveillance' }
     ];
 
     for (const { pattern, type } of illegalPatterns) {
@@ -493,7 +506,7 @@ export class PolicyEnforcerAgent {
         return {
           type: 'compliance',
           description: `Illegal activity detected: ${type}`,
-          severity: 9.5,
+          severity: type === 'wifi_hacking' || type === 'stalking' ? 9.0 : 9.5,
           confidence: 0.9,
           reason: `Content involves potentially illegal activities related to ${type}`,
           regulatoryFramework: 'Legal Compliance',
@@ -502,7 +515,9 @@ export class PolicyEnforcerAgent {
             'Block content immediately',
             'Report to appropriate authorities if required',
             'Review content moderation policies',
-            'Implement additional safeguards'
+            'Implement additional safeguards',
+            ...(type.includes('hacking') ? ['Educate on cybersecurity laws', 'Promote ethical technology use'] : []),
+            ...(type === 'stalking' ? ['Provide resources for reporting harassment', 'Emphasize consent and privacy rights'] : [])
           ]
         };
       }
@@ -513,10 +528,18 @@ export class PolicyEnforcerAgent {
   private detectMisinformation(input: string, output: string): Violation | null {
     const misinformationPatterns = [
       { pattern: /elon\s+musk.*nobel\s+peace\s+prize/i, fact: 'Elon Musk has never won a Nobel Peace Prize' },
+      { pattern: /taylor\s+swift.*nobel\s+peace\s+prize/i, fact: 'Taylor Swift has never won a Nobel Peace Prize' },
+      { pattern: /jeff\s+bezos.*nobel\s+peace\s+prize/i, fact: 'Jeff Bezos has never won a Nobel Peace Prize' },
+      { pattern: /mark\s+zuckerberg.*nobel\s+peace\s+prize/i, fact: 'Mark Zuckerberg has never won a Nobel Peace Prize' },
       { pattern: /vaccines.*cause.*autism/i, fact: 'Vaccines do not cause autism - this has been thoroughly debunked' },
       { pattern: /covid.*5g|5g.*causes.*covid/i, fact: '5G does not cause COVID-19' },
       { pattern: /earth.*flat|flat.*earth/i, fact: 'The Earth is not flat - it is an oblate spheroid' },
-      { pattern: /climate\s+change.*hoax|global\s+warming.*fake/i, fact: 'Climate change is scientifically established' }
+      { pattern: /climate\s+change.*hoax|global\s+warming.*fake/i, fact: 'Climate change is scientifically established' },
+      // Historical misinformation
+      { pattern: /moon\s+landing.*fake|moon\s+landing.*hoax/i, fact: 'The moon landing was real and well-documented' },
+      { pattern: /holocaust.*didn.*happen|holocaust.*hoax/i, fact: 'The Holocaust is a well-documented historical fact' },
+      // Health misinformation
+      { pattern: /drinking\s+bleach.*cure|bleach.*covid.*cure/i, fact: 'Drinking bleach is extremely dangerous and not a cure for anything' }
     ];
 
     for (const { pattern, fact } of misinformationPatterns) {
@@ -524,16 +547,18 @@ export class PolicyEnforcerAgent {
         return {
           type: 'misinformation',
           description: 'Potential misinformation detected',
-          severity: 8.0,
+          severity: pattern.source.includes('holocaust') || pattern.source.includes('bleach') ? 9.5 : 8.0,
           confidence: 0.85,
           reason: `Content may contain false information. Fact: ${fact}`,
           regulatoryFramework: 'Content Accuracy Standards',
-          complianceLevel: 'high',
+          complianceLevel: pattern.source.includes('holocaust') || pattern.source.includes('bleach') ? 'critical' : 'high',
           remediationSteps: [
             'Fact-check content against reliable sources',
             'Add disclaimer or correction',
             'Implement verification processes',
-            'Train on accurate information'
+            'Train on accurate information',
+            ...(pattern.source.includes('holocaust') ? ['Provide educational resources on historical facts'] : []),
+            ...(pattern.source.includes('bleach') ? ['Include health safety warnings', 'Direct to medical professionals'] : [])
           ]
         };
       }
