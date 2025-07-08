@@ -174,13 +174,19 @@ const InteractionCard: React.FC<InteractionCardProps> = ({ interaction, onAction
                     <p className="text-xs text-gray-500 mt-1">{violation.reason}</p>
                     {violation.remediationSteps && violation.remediationSteps.length > 0 && (
                       <div className="mt-2">
-                        <p className="text-xs font-medium text-gray-700 mb-1">Remediation Steps:</p>
-                        <ul className="text-xs text-gray-600 list-disc list-inside space-y-1">
+                        <p className="text-xs font-medium text-gray-700 mb-1">🔧 Remediation:</p>
+                        <ul className="text-xs text-gray-600 space-y-1">
                           {violation.remediationSteps.slice(0, 2).map((step, idx) => (
-                            <li key={idx}>{step}</li>
+                            <li key={idx} className="flex items-start space-x-1">
+                              <span className="text-blue-500 mt-0.5">•</span>
+                              <span>{step}</span>
+                            </li>
                           ))}
                           {violation.remediationSteps.length > 2 && (
-                            <li className="text-gray-500">+{violation.remediationSteps.length - 2} more...</li>
+                            <li className="flex items-start space-x-1 text-gray-500">
+                              <span className="text-gray-400 mt-0.5">•</span>
+                              <span>+{violation.remediationSteps.length - 2} more steps...</span>
+                            </li>
                           )}
                         </ul>
                       </div>
@@ -205,18 +211,26 @@ const InteractionCard: React.FC<InteractionCardProps> = ({ interaction, onAction
           <div>
             <h4 className="font-medium text-gray-900 mb-2">Agent Actions:</h4>
             <motion.div 
-              className="space-y-2"
+              className="space-y-3"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ staggerChildren: 0.1 }}
             >
-              {interaction.agentActions.map((action, index) => (
+              {interaction.agentActions
+                .filter((action, index, self) => 
+                  // Remove duplicate feedback agent entries
+                  !(action.agentName === 'FeedbackAgent' && 
+                    action.details === 'Feedback agent initialized and ready to collect user feedback' &&
+                    self.findIndex(a => a.agentName === 'FeedbackAgent' && a.action === 'log') !== index)
+                )
+                .map((action, index) => (
                 <AgentBadge
                   key={index}
                   agentName={action.agentName}
                   action={action.action as any}
                   details={action.details}
                   timestamp={action.timestamp}
+                  animated={true}
                 />
               ))}
             </motion.div>

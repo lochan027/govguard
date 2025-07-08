@@ -39,43 +39,43 @@ const AgentBadge: React.FC<AgentBadgeProps> = ({
       case 'flag':
         return {
           icon: XCircle,
-          color: 'bg-red-100 text-red-800 border-red-200',
-          iconColor: 'text-red-600',
+          color: 'bg-red-50 text-red-700 border-red-200',
+          iconColor: 'text-red-500',
           emoji: '🚫'
         };
       case 'approve':
         return {
           icon: CheckCircle,
-          color: 'bg-green-100 text-green-800 border-green-200',
-          iconColor: 'text-green-600',
+          color: 'bg-green-50 text-green-700 border-green-200',
+          iconColor: 'text-green-500',
           emoji: '✅'
         };
       case 'verify':
         return {
           icon: CheckCircle,
-          color: 'bg-blue-100 text-blue-800 border-blue-200',
-          iconColor: 'text-blue-600',
+          color: 'bg-blue-50 text-blue-700 border-blue-200',
+          iconColor: 'text-blue-500',
           emoji: '🔍'
         };
       case 'suggest':
         return {
           icon: AlertTriangle,
-          color: 'bg-yellow-100 text-yellow-800 border-yellow-200',
-          iconColor: 'text-yellow-600',
+          color: 'bg-orange-50 text-orange-700 border-orange-200',
+          iconColor: 'text-orange-500',
           emoji: '💡'
         };
       case 'log':
         return {
           icon: Clock,
-          color: 'bg-gray-100 text-gray-800 border-gray-200',
-          iconColor: 'text-gray-600',
+          color: 'bg-slate-50 text-slate-600 border-slate-200',
+          iconColor: 'text-slate-500',
           emoji: '📝'
         };
       default:
         return {
           icon: Clock,
-          color: 'bg-gray-100 text-gray-800 border-gray-200',
-          iconColor: 'text-gray-600',
+          color: 'bg-slate-50 text-slate-600 border-slate-200',
+          iconColor: 'text-slate-500',
           emoji: '⚡'
         };
     }
@@ -103,7 +103,7 @@ const AgentBadge: React.FC<AgentBadgeProps> = ({
       initial={animated ? { opacity: 0, scale: 0.8, y: 20 } : false}
       animate={animated ? { opacity: 1, scale: 1, y: 0 } : false}
       whileHover={{ scale: 1.02 }}
-      className={`flex items-center justify-between p-3 rounded-lg border ${actionConfig.color} transition-all duration-200`}
+      className={`flex items-center justify-between p-3 rounded-lg border ${actionConfig.color} transition-all duration-200 shadow-sm`}
     >
       <div className="flex items-center space-x-3">
         <div className="flex items-center space-x-2">
@@ -116,14 +116,14 @@ const AgentBadge: React.FC<AgentBadgeProps> = ({
             <span className="font-medium text-sm">
               {formatAgentName(agentName)}
             </span>
-            <span className="text-lg">{actionConfig.emoji}</span>
+            <span className="text-sm">{actionConfig.emoji}</span>
           </div>
-          <p className="text-xs opacity-90 mt-1">{details}</p>
+          <p className="text-xs opacity-80 mt-1 leading-relaxed">{details}</p>
         </div>
       </div>
       
       <div className="text-right">
-        <span className="text-xs opacity-75">
+        <span className="text-xs opacity-60 font-mono">
           {formatTime(timestamp)}
         </span>
       </div>

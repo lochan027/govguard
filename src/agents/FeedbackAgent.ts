@@ -8,29 +8,22 @@ export class FeedbackAgent {
   async process(interaction: LLMInteraction): Promise<AgentAction[]> {
     const actions: AgentAction[] = [];
 
-    // Always log that the feedback agent processed the interaction
-    actions.push({
-      agentName: this.name,
-      action: 'log',
-      details: 'Feedback agent initialized and ready to collect user feedback',
-      timestamp: new Date()
-    });
 
     if (interaction.userFeedback) {
       actions.push({
         agentName: this.name,
         action: 'log',
-        details: `Collected user feedback: ${interaction.userFeedback.rating}`,
+        details: `User feedback collected: ${interaction.userFeedback.rating}${interaction.userFeedback.comment ? ' with comment' : ''}`,
         timestamp: new Date()
       });
 
       await this.processFeedback(interaction);
     } else {
-      // Log that we're waiting for feedback
+      // Only log once that we're monitoring for feedback
       actions.push({
         agentName: this.name,
         action: 'log',
-        details: 'Monitoring interaction for user feedback',
+        details: 'Feedback agent ready to collect user input',
         timestamp: new Date()
       });
     }
