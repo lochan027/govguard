@@ -78,7 +78,7 @@ const LiveMonitor: React.FC = () => {
       return;
     }
     
-    // Handle approve/block actions
+    // Handle approve/block actions - update status immediately
     setInteractions(prev => 
       prev.map(interaction => 
         interaction.id === id 
@@ -90,6 +90,13 @@ const LiveMonitor: React.FC = () => {
           : interaction
       )
     );
+    
+    // Show toast for status change
+    if (action === 'approve') {
+      toast.success('Interaction Approved', 'Content has been approved for use');
+    } else if (action === 'block') {
+      toast.error('Interaction Blocked', 'Content has been blocked due to violations');
+    }
   };
 
   return (

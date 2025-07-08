@@ -37,11 +37,12 @@ const AgentBadge: React.FC<AgentBadgeProps> = ({
   const getActionConfig = (action: string) => {
     switch (action) {
       case 'flag':
+      case 'block':
         return {
           icon: XCircle,
-          color: 'bg-gradient-to-r from-red-50 to-red-100 text-red-800 border-red-300 shadow-sm',
+          color: 'bg-gradient-to-r from-red-100 to-red-200 text-red-900 border-red-400 shadow-md',
           iconColor: 'text-red-600',
-          emoji: '⚠️'
+          emoji: action === 'block' ? '🚫' : '⚠️'
         };
       case 'approve':
         return {
