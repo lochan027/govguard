@@ -168,74 +168,6 @@ const InteractionCard: React.FC<InteractionCardProps> = ({ interaction, onAction
           </p>
         </div>
 
-        {interaction.violations.length > 0 && (
-          <div>
-            <h4 className="font-medium text-gray-900 mb-2">Violations:</h4>
-            <motion.div 
-              className="space-y-2"
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              transition={{ duration: 0.3 }}
-            >
-              {interaction.violations.map((violation, index) => (
-                <motion.div 
-                  key={index} 
-                  className={`flex items-start justify-between p-4 rounded-xl border shadow-sm ${getViolationColor(violation.type)}`}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  <div>
-                    <div className="flex items-center space-x-2 mb-2">
-                      {getViolationIcon(violation.type)}
-                      <span className="px-3 py-1 rounded-full text-xs font-bold bg-white/60 text-gray-800 shadow-sm">
-                        {violation.type.toUpperCase()}
-                      </span>
-                      {violation.regulatoryFramework && (
-                        <span className="px-2 py-1 rounded-full text-xs font-medium bg-white/80 text-gray-700 shadow-sm">
-                          {violation.regulatoryFramework}
-                        </span>
-                      )}
-                    </div>
-                    <p className="text-sm font-medium text-gray-800 mt-1">{violation.description}</p>
-                    <p className="text-xs text-gray-600 mt-1.5 leading-relaxed">{violation.reason}</p>
-                    {violation.remediationSteps && violation.remediationSteps.length > 0 && (
-                      <div className="mt-3 bg-white/40 rounded-lg p-3">
-                        <p className="text-xs font-semibold text-gray-800 mb-2 flex items-center space-x-1">
-                          <span>🔧</span>
-                          <span>Remediation Steps:</span>
-                        </p>
-                        <ul className="text-xs text-gray-700 space-y-1.5">
-                          {violation.remediationSteps.slice(0, 2).map((step, idx) => (
-                            <li key={idx} className="flex items-start space-x-1">
-                              <span className="text-blue-600 mt-0.5 font-bold">•</span>
-                              <span className="font-medium">{step}</span>
-                            </li>
-                          ))}
-                          {violation.remediationSteps.length > 2 && (
-                            <li className="flex items-start space-x-1 text-gray-600">
-                              <span className="text-gray-500 mt-0.5 font-bold">•</span>
-                              <span className="font-medium italic">+{violation.remediationSteps.length - 2} more steps...</span>
-                            </li>
-                          )}
-                        </ul>
-                      </div>
-                    )}
-                  </div>
-                  <div className="text-right bg-white/50 rounded-lg p-2">
-                    <p className="text-sm font-bold text-gray-900">
-                      {violation.severity.toFixed(1)}/10
-                    </p>
-                    <p className="text-sm font-bold text-gray-900">
-                      {(violation.confidence * 100).toFixed(0)}%
-                    </p>
-                    <p className="text-xs text-gray-600 font-medium">conf.</p>
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-        )}
 
         {interaction.agentActions.length > 0 && (
           <div>
@@ -307,7 +239,7 @@ const InteractionCard: React.FC<InteractionCardProps> = ({ interaction, onAction
           </motion.button>
         </div>
 
-        {interaction.status === 'pending' && (
+        {(interaction.status === 'pending' || interaction.status === 'blocked') && (
           <div className="flex items-center space-x-2">
             <motion.button
               whileHover={{ scale: 1.05 }}
