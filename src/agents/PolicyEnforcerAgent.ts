@@ -95,6 +95,73 @@ export class PolicyEnforcerAgent {
   private checkGDPRCompliance(text: string): Violation[] {
     const violations: Violation[] = [];
 
+    // Enhanced personal information request patterns
+    const personalInfoRequestPatterns = [
+      { 
+        pattern: /(give\s+me|tell\s+me|what\s+is|find|get|provide).*?(phone\s+number|telephone\s+number|mobile\s+number|cell\s+phone)/i, 
+        type: 'phone number request',
+        severity: 8.5
+      },
+      { 
+        pattern: /(give\s+me|tell\s+me|what\s+is|find|get|provide).*?(address|home\s+address|residential\s+address|street\s+address|mailing\s+address)/i, 
+        type: 'address request',
+        severity: 8.5
+      },
+      { 
+        pattern: /(give\s+me|tell\s+me|what\s+is|find|get|provide).*?(email\s+address|email|e-mail)/i, 
+        type: 'email address request',
+        severity: 8.0
+      },
+      { 
+        pattern: /(give\s+me|tell\s+me|what\s+is|find|get|provide).*?(social\s+security\s+number|ssn|social\s+security)/i, 
+        type: 'SSN request',
+        severity: 9.5
+      },
+      { 
+        pattern: /(give\s+me|tell\s+me|what\s+is|find|get|provide).*?(credit\s+card|bank\s+account|financial\s+information)/i, 
+        type: 'financial information request',
+        severity: 9.0
+      },
+      { 
+        pattern: /(give\s+me|tell\s+me|what\s+is|find|get|provide).*?(personal\s+information|private\s+information|contact\s+information)/i, 
+        type: 'personal information request',
+        severity: 8.0
+      },
+      // Celebrity/public figure specific patterns
+      { 
+        pattern: /(taylor\s+swift|elon\s+musk|jeff\s+bezos|mark\s+zuckerberg|bill\s+gates).*(phone\s+number|address|home\s+address|personal\s+contact)/i, 
+        type: 'celebrity personal information request',
+        severity: 9.0
+      },
+      // Location tracking patterns
+      { 
+        pattern: /(where\s+does|where\s+is|location\s+of).*(live|lives|residing|home|house)/i, 
+        type: 'location request',
+        severity: 8.5
+      }
+    ];
+
+    personalInfoRequestPatterns.forEach(({ pattern, type, severity }) => {
+      if (pattern.test(text)) {
+        violations.push({
+          type: 'gdpr',
+          description: `GDPR violation: Request for ${type}`,
+          severity,
+          confidence: 0.9,
+          reason: `Request for personal information violates GDPR data protection principles and privacy rights`,
+          regulatoryFramework: 'GDPR Article 6 & 7',
+          complianceLevel: severity >= 9.0 ? 'critical' : 'high',
+          remediationSteps: [
+            'Block request for personal information',
+            'Educate on privacy rights and data protection',
+            'Implement stronger content filtering',
+            'Report potential privacy violations',
+            'Provide information on proper data request procedures'
+          ]
+        });
+      }
+    });
+
     // Article 9 - Special Categories of Personal Data
     const specialCategoryPatterns = [
       { pattern: /racial.*origin|ethnic.*origin/i, category: 'racial/ethnic origin' },
