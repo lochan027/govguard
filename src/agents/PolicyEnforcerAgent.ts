@@ -8,32 +8,43 @@ export class PolicyEnforcerAgent {
   async process(interaction: LLMInteraction): Promise<AgentAction[]> {
     const violations = await this.detectViolations(interaction);
     const actions: AgentAction[] = [];
-    { pattern: /ip\s+address.*\d+\.\d+\.\d+\.\d+/i, type: 'IP address' },
-    // Enhanced patterns for personal information requests
-    { pattern: /(give\s+me|tell\s+me|what\s+is|find).*?(phone\s+number|address|home\s+address|personal\s+address)/i, type: 'personal contact information request' },
-    { pattern: /(phone\s+number|contact\s+info|home\s+address|personal\s+address).*?(taylor\s+swift|celebrity|famous\s+person)/i, type: 'celebrity personal information' },
-    { pattern: /(taylor\s+swift|elon\s+musk|jeff\s+bezos|bill\s+gates).*(phone\s+number|address|home|personal\s+info)/i, type: 'celebrity personal information' },
-    { pattern: /where\s+does\s+(taylor\s+swift|elon\s+musk|any\s+celebrity)\s+live/i, type: 'celebrity residence inquiry' },
-    { pattern: /(dox|doxx|personal\s+details|private\s+information).*(celebrity|famous\s+person|public\s+figure)/i, type: 'doxxing attempt' }
 
     if (violations.length > 0) {
       // Update the interaction's violations array
       interaction.violations.push(...violations);
       
       const frameworks = [...new Set(violations.map(v => v.regulatoryFramework).filter(Boolean))];
-        description: `GDPR personal data violation: ${type}`,
-        severity: type.includes('celebrity') || type.includes('doxxing') ? 9.0 : 7.5,
-        confidence: type.includes('celebrity') || type.includes('doxxing') ? 0.95 : 0.85,
+      
+      actions.push({
+        agentName: this.name,
+        action: 'block',
+        description: `Policy violations detected: ${violations.length} violation(s) across ${frameworks.length} regulatory framework(s): ${frameworks.join(', ')}`,
+        severity: Math.max(...violations.map(v => v.severity)),
+        confidence: violations.reduce((sum, v) => sum + v.confidence, 0) / violations.length,
         details: `Detected ${violations.length} violation(s) across ${frameworks.length} regulatory framework(s): ${frameworks.join(', ')}`,
-        timestamp: new Date()
-        complianceLevel: type.includes('celebrity') || type.includes('doxxing') ? 'critical' : 'high',
+        timestamp: new Date(),
+        complianceLevel: violations.some(v => v.complianceLevel === 'critical') ? 'critical' : 'high',
+        remediationSteps: [
+          'Review content for policy compliance',
+          'Implement additional safeguards',
+          'Document processing activities',
+          ...violations.flatMap(v => v.remediationSteps || [])
+        ]
+      });
     } else {
       actions.push({
         agentName: this.name,
         action: 'approve',
-          'Document processing activities',
-          ...(type.includes('celebrity') ? ['Respect privacy rights of public figures', 'Avoid sharing personal contact information'] : [])
-        timestamp: new Date()
+        description: 'No policy violations detected',
+        severity: 0,
+        confidence: 0.95,
+        details: 'Content passed all policy checks',
+        timestamp: new Date(),
+        complianceLevel: 'low',
+        remediationSteps: [
+          'Continue monitoring for policy compliance',
+          'Document processing activities'
+        ]
       });
     }
 
