@@ -164,9 +164,27 @@ const InteractionCard: React.FC<InteractionCardProps> = ({ interaction, onAction
                       <span className={`px-2 py-1 rounded-full text-xs font-medium ${getViolationColor(violation.type)}`}>
                         {violation.type.toUpperCase()}
                       </span>
+                      {violation.regulatoryFramework && (
+                        <span className="px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
+                          {violation.regulatoryFramework}
+                        </span>
+                      )}
                     </div>
                     <p className="text-sm text-gray-700 mt-1">{violation.description}</p>
                     <p className="text-xs text-gray-500 mt-1">{violation.reason}</p>
+                    {violation.remediationSteps && violation.remediationSteps.length > 0 && (
+                      <div className="mt-2">
+                        <p className="text-xs font-medium text-gray-700 mb-1">Remediation Steps:</p>
+                        <ul className="text-xs text-gray-600 list-disc list-inside space-y-1">
+                          {violation.remediationSteps.slice(0, 2).map((step, idx) => (
+                            <li key={idx}>{step}</li>
+                          ))}
+                          {violation.remediationSteps.length > 2 && (
+                            <li className="text-gray-500">+{violation.remediationSteps.length - 2} more...</li>
+                          )}
+                        </ul>
+                      </div>
+                    )}
                   </div>
                   <div className="text-right">
                     <p className="text-sm font-medium text-gray-900">

@@ -119,10 +119,10 @@ const Disclaimer: React.FC = () => {
               </div>
 
               <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg p-4">
-                <h3 className="font-semibold text-amber-200 mb-2">⚠️ Demo Disclaimer</h3>
+                  <span>Regulatory Compliance</span>
                 <p className="text-sm text-amber-100">
                   This is a demonstration platform. Responses are AI-generated and should not be used for medical, legal, financial, or personal advice. 
-                  All data is temporary and for testing purposes only.
+                  Comprehensive compliance with GDPR, FISMA, EU AI Act, DSA, NIS2, ISO/IEC 42001, and IEEE Ethics Guidelines.
                 </p>
               </div>
             </motion.div>

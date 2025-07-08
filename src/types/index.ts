@@ -14,12 +14,15 @@ export interface LLMInteraction {
 }
 
 export interface Violation {
-  type: 'pii' | 'hallucination' | 'bias' | 'misinformation' | 'hate_speech' | 'compliance';
+  type: 'pii' | 'hallucination' | 'bias' | 'misinformation' | 'hate_speech' | 'compliance' | 'gdpr' | 'fisma' | 'eu_ai_act' | 'dsa' | 'nis2' | 'iso_42001' | 'ieee_ethics';
   description: string;
   severity: number; // 0-10 scale
   confidence: number;
   reason: string;
   location?: string;
+  regulatoryFramework?: string;
+  complianceLevel?: 'low' | 'medium' | 'high' | 'critical';
+  remediationSteps?: string[];
 }
 
 export interface AgentAction {

@@ -258,14 +258,16 @@ const Settings: React.FC = () => {
             <div className="space-y-1 text-sm">
               <p className="text-blue-800">
                 <span className="font-medium">Active Agents:</span>{' '}
-                {Object.values(settings).slice(0, -1).filter(agent => agent.enabled).length} of 5
+                {Object.entries(settings).filter(([key, value]) => 
+                  key !== 'severityThreshold' && value.enabled
+                ).length} of 5
               </p>
               <p className="text-blue-800">
                 <span className="font-medium">Block Threshold:</span> {settings.severityThreshold.toFixed(1)}/10
               </p>
               <p className="text-blue-800">
                 <span className="font-medium">Status:</span>{' '}
-                {Object.values(settings).slice(0, -1).every(agent => agent.enabled) 
+                {Object.entries(settings).filter(([key]) => key !== 'severityThreshold').every(([, value]) => value.enabled)
                   ? 'Full Protection' 
                   : 'Partial Protection'}
               </p>
