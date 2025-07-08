@@ -180,8 +180,152 @@ Provide a confidence score based on the strength of available evidence.`;
         throw new Error('No content in Perplexity response');
       }
 
-      // Try to parse JSON response
-      const jsonMatch = content.match(/\{[\s\S]*\}/);
+      // First try to extract JSON from markdown code blocks
+      let jsonString = this.extractJsonFromMarkdown(content);
+      
+      // If no markdown block found, try to find JSON object in text
+      if (!jsonString) {
+        jsonString = this.extractJsonFromText(content);
+      }
+      
+      // Try to parse the extracted JSON
+      if (jsonString) {
+        const parsed = JSON.parse(jsonString);
+        return {
+          isAccurate: parsed.isAccurate || false,
+          confidence: Math.max(0, Math.min(1, parsed.confidence || 0)),
+          summary: parsed.summary || 'Verification completed',
+          sources: parsed.sources || [],
+          reasoning: parsed.reasoning || content
+        };
+      }
+
+      // Fallback: analyze text response
+      const isAccurate = this.analyzeTextForAccuracy(content);
+      const confidence = this.extractConfidenceFromText(content);
+
+      return {
+        isAccurate,
+        confidence,
+        summary: content.substring(0, 200) + (content.length > 200 ? '...' : ''),
+        reasoning: content
+      };
+    } catch (error) {
+      console.error('Failed to parse Perplexity response:', error);
+      
+      // Return conservative result on parsing failure
+      return {
+        isAccurate: false,
+        confidence: 0.5,
+        summary: 'Unable to parse verification response',
+        reasoning: 'Response parsing failed, treating as potentially inaccurate for safety'
+      };
+    }
+  }
+
+  private extractJsonFromMarkdown(content: string): string | null {
+    // Look for JSON in markdown code blocks
+    const markdownJsonMatch = content.match(/```(?:json)?\s*(\{[\s\S]*?\})\s*```/i);
+    if (markdownJsonMatch) {
+      return markdownJsonMatch[1].trim();
+    }
+    return null;
+  }
+
+  private extractJsonFromText(content: string): string | null {
+    // Find the first '{' and the last '}' to extract potential JSON
+    const firstBrace = content.indexOf('{');
+    const lastBrace = content.lastIndexOf('}');
+    
+    if (firstBrace !== -1 && lastBrace !== -1 && firstBrace < lastBrace) {
+      const potentialJson = content.substring(firstBrace, lastBrace + 1);
+      
+      // Basic validation - check if it looks like JSON structure
+      if (this.isValidJsonStructure(potentialJson)) {
+        return potentialJson;
+      }
+    }
+    
+    return null;
+  }
+
+  private isValidJsonStructure(str: string): boolean {
+    // Basic checks for JSON-like structure
+    const trimmed = str.trim();
+    if (!trimmed.startsWith('{') || !trimmed.endsWith('}')) {
+      return false;
+    }
+    
+    // Count braces to ensure they're balanced
+    let braceCount = 0;
+    for (const char of trimmed) {
+      if (char === '{') braceCount++;
+      if (char === '}') braceCount--;
+      if (braceCount < 0) return false;
+    }
+    
+    return braceCount === 0;
+  }
+
+  private analyzeTextForAccuracy(text: string): boolean {
+    const inaccurateIndicators = [
+      'false', 'incorrect', 'inaccurate', 'misleading', 'misinformation',
+      'not true', 'fabricated', 'unverified', 'disputed', 'debunked'
+    ];
+    
+    const accurateIndicators = [
+      'accurate', 'correct', 'true', 'verified', 'confirmed',
+      'supported by evidence', 'factual', 'reliable'
+    ];
+
+    const textLower = text.toLowerCase();
+    
+    const inaccurateScore = inaccurateIndicators.reduce((score, indicator) => 
+      score + (textLower.includes(indicator) ? 1 : 0), 0);
+    
+    const accurateScore = accurateIndicators.reduce((score, indicator) => 
+      score + (textLower.includes(indicator) ? 1 : 0), 0);
+
+    return accurateScore > inaccurateScore;
+  }
+
+  private extractConfidenceFromText(text: string): number {
+    // Look for confidence percentages
+    const percentageMatch = text.match(/(\d+)%/);
+    if (percentageMatch) {
+      return parseInt(percentageMatch[1]) / 100;
+    }
+
+    // Look for confidence words
+    const confidenceWords = {
+      'very confident': 0.9,
+      'highly confident': 0.9,
+      'confident': 0.8,
+      'likely': 0.7,
+      'probably': 0.6,
+      'possibly': 0.5,
+      'uncertain': 0.4,
+      'unlikely': 0.3,
+      'doubtful': 0.2
+    };
+
+    const textLower = text.toLowerCase();
+    for (const [phrase, confidence] of Object.entries(confidenceWords)) {
+      if (textLower.includes(phrase)) {
+        return confidence;
+      }
+    }
+
+    return 0.7; // Default moderate confidence
+  }
+
+  isConfigured(): boolean {
+    return !!this.apiKey && this.apiKey.trim() !== '';
+  }
+}
+
+export const perplexityService = new PerplexityService();
+
       if (jsonMatch) {
         const parsed = JSON.parse(jsonMatch[0]);
         return {
