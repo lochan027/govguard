@@ -18,7 +18,7 @@ const SafetyBadge: React.FC<SafetyBadgeProps> = ({
       case 'safe':
         return {
           icon: CheckCircle,
-          color: 'bg-green-100 text-green-800 border-green-200',
+          color: 'bg-gradient-to-r from-emerald-50 to-green-100 text-emerald-800 border-emerald-300 shadow-lg',
           iconColor: 'text-green-600',
           label: '✅ SAFE',
           description: 'No violations detected'
@@ -26,15 +26,15 @@ const SafetyBadge: React.FC<SafetyBadgeProps> = ({
       case 'flagged':
         return {
           icon: AlertTriangle,
-          color: 'bg-yellow-100 text-yellow-800 border-yellow-200',
-          iconColor: 'text-yellow-600',
+          color: 'bg-gradient-to-r from-amber-50 to-yellow-100 text-amber-800 border-amber-300 shadow-lg',
+          iconColor: 'text-amber-600',
           label: '⚠️ FLAGGED',
           description: `${violationCount} violation${violationCount !== 1 ? 's' : ''} detected`
         };
       case 'blocked':
         return {
           icon: XCircle,
-          color: 'bg-red-100 text-red-800 border-red-200',
+          color: 'bg-gradient-to-r from-red-50 to-red-100 text-red-800 border-red-300 shadow-lg',
           iconColor: 'text-red-600',
           label: '❌ BLOCKED',
           description: `${violationCount} violation${violationCount !== 1 ? 's' : ''} detected`
@@ -50,16 +50,18 @@ const SafetyBadge: React.FC<SafetyBadgeProps> = ({
       initial={animated ? { opacity: 0, scale: 0.8 } : false}
       animate={animated ? { opacity: 1, scale: 1 } : false}
       whileHover={{ scale: 1.05 }}
-      className={`inline-flex items-center space-x-2 px-3 py-2 rounded-full border ${config.color} font-medium text-sm`}
+      className={`inline-flex items-center space-x-2 px-4 py-2 rounded-full border ${config.color} font-semibold text-sm backdrop-blur-sm`}
     >
-      <Shield className={`h-4 w-4 ${config.iconColor}`} />
-      <Icon className={`h-4 w-4 ${config.iconColor}`} />
+      <div className="flex items-center space-x-1 bg-white/40 rounded-full px-2 py-1">
+        <Shield className={`h-4 w-4 ${config.iconColor}`} />
+        <Icon className={`h-4 w-4 ${config.iconColor}`} />
+      </div>
       <span>{config.label}</span>
       {violationCount > 0 && (
         <motion.span
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
-          className="bg-white bg-opacity-50 px-2 py-1 rounded-full text-xs font-bold"
+          className="bg-white/60 px-2 py-1 rounded-full text-xs font-bold shadow-sm"
         >
           {violationCount}
         </motion.span>

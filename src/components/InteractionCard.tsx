@@ -51,24 +51,50 @@ const InteractionCard: React.FC<InteractionCardProps> = ({ interaction, onAction
   const getViolationColor = (type: string) => {
     switch (type) {
       case 'pii':
-        return 'bg-red-100 text-red-800';
+        return 'bg-gradient-to-r from-red-50 to-red-100 text-red-800 border-red-200';
+      case 'gdpr':
+        return 'bg-gradient-to-r from-blue-50 to-blue-100 text-blue-800 border-blue-200';
+      case 'fisma':
+        return 'bg-gradient-to-r from-purple-50 to-purple-100 text-purple-800 border-purple-200';
+      case 'eu_ai_act':
+        return 'bg-gradient-to-r from-indigo-50 to-indigo-100 text-indigo-800 border-indigo-200';
+      case 'dsa':
+        return 'bg-gradient-to-r from-cyan-50 to-cyan-100 text-cyan-800 border-cyan-200';
+      case 'nis2':
+        return 'bg-gradient-to-r from-teal-50 to-teal-100 text-teal-800 border-teal-200';
+      case 'iso_42001':
+        return 'bg-gradient-to-r from-green-50 to-green-100 text-green-800 border-green-200';
+      case 'ieee_ethics':
+        return 'bg-gradient-to-r from-pink-50 to-pink-100 text-pink-800 border-pink-200';
       case 'misinformation':
-        return 'bg-orange-100 text-orange-800';
+        return 'bg-gradient-to-r from-orange-50 to-orange-100 text-orange-800 border-orange-200';
       case 'bias':
-        return 'bg-purple-100 text-purple-800';
+        return 'bg-gradient-to-r from-violet-50 to-violet-100 text-violet-800 border-violet-200';
       case 'hallucination':
-        return 'bg-yellow-100 text-yellow-800';
+        return 'bg-gradient-to-r from-yellow-50 to-yellow-100 text-yellow-800 border-yellow-200';
       case 'hate_speech':
-        return 'bg-red-200 text-red-900';
+        return 'bg-gradient-to-r from-red-100 to-red-200 text-red-900 border-red-300';
+      case 'compliance':
+        return 'bg-gradient-to-r from-slate-50 to-slate-100 text-slate-800 border-slate-200';
       default:
-        return 'bg-gray-100 text-gray-800';
+        return 'bg-gradient-to-r from-gray-50 to-gray-100 text-gray-800 border-gray-200';
     }
   };
 
   const getViolationIcon = (type: string) => {
     switch (type) {
       case 'pii':
+      case 'gdpr':
         return <Shield className="h-4 w-4" />;
+      case 'fisma':
+      case 'nis2':
+        return <Shield className="h-4 w-4" />;
+      case 'eu_ai_act':
+      case 'iso_42001':
+      case 'ieee_ethics':
+        return <AlertCircle className="h-4 w-4" />;
+      case 'dsa':
+        return <XCircle className="h-4 w-4" />;
       case 'misinformation':
         return <AlertCircle className="h-4 w-4" />;
       case 'bias':
@@ -76,6 +102,7 @@ const InteractionCard: React.FC<InteractionCardProps> = ({ interaction, onAction
       case 'hallucination':
         return <AlertTriangle className="h-4 w-4" />;
       case 'hate_speech':
+      case 'compliance':
         return <XCircle className="h-4 w-4" />;
       default:
         return <AlertTriangle className="h-4 w-4" />;
@@ -153,53 +180,56 @@ const InteractionCard: React.FC<InteractionCardProps> = ({ interaction, onAction
               {interaction.violations.map((violation, index) => (
                 <motion.div 
                   key={index} 
-                  className="flex items-start justify-between p-3 bg-red-50 rounded-md"
+                  className={`flex items-start justify-between p-4 rounded-xl border shadow-sm ${getViolationColor(violation.type)}`}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.1 }}
                 >
                   <div>
-                    <div className="flex items-center space-x-2 mb-1">
+                    <div className="flex items-center space-x-2 mb-2">
                       {getViolationIcon(violation.type)}
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${getViolationColor(violation.type)}`}>
+                      <span className="px-3 py-1 rounded-full text-xs font-bold bg-white/60 text-gray-800 shadow-sm">
                         {violation.type.toUpperCase()}
                       </span>
                       {violation.regulatoryFramework && (
-                        <span className="px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
+                        <span className="px-2 py-1 rounded-full text-xs font-medium bg-white/80 text-gray-700 shadow-sm">
                           {violation.regulatoryFramework}
                         </span>
                       )}
                     </div>
-                    <p className="text-sm text-gray-700 mt-1">{violation.description}</p>
-                    <p className="text-xs text-gray-500 mt-1">{violation.reason}</p>
+                    <p className="text-sm font-medium text-gray-800 mt-1">{violation.description}</p>
+                    <p className="text-xs text-gray-600 mt-1.5 leading-relaxed">{violation.reason}</p>
                     {violation.remediationSteps && violation.remediationSteps.length > 0 && (
-                      <div className="mt-2">
-                        <p className="text-xs font-medium text-gray-700 mb-1">🔧 Remediation:</p>
-                        <ul className="text-xs text-gray-600 space-y-1">
+                      <div className="mt-3 bg-white/40 rounded-lg p-3">
+                        <p className="text-xs font-semibold text-gray-800 mb-2 flex items-center space-x-1">
+                          <span>🔧</span>
+                          <span>Remediation Steps:</span>
+                        </p>
+                        <ul className="text-xs text-gray-700 space-y-1.5">
                           {violation.remediationSteps.slice(0, 2).map((step, idx) => (
                             <li key={idx} className="flex items-start space-x-1">
-                              <span className="text-blue-500 mt-0.5">•</span>
-                              <span>{step}</span>
+                              <span className="text-blue-600 mt-0.5 font-bold">•</span>
+                              <span className="font-medium">{step}</span>
                             </li>
                           ))}
                           {violation.remediationSteps.length > 2 && (
-                            <li className="flex items-start space-x-1 text-gray-500">
-                              <span className="text-gray-400 mt-0.5">•</span>
-                              <span>+{violation.remediationSteps.length - 2} more steps...</span>
+                            <li className="flex items-start space-x-1 text-gray-600">
+                              <span className="text-gray-500 mt-0.5 font-bold">•</span>
+                              <span className="font-medium italic">+{violation.remediationSteps.length - 2} more steps...</span>
                             </li>
                           )}
                         </ul>
                       </div>
                     )}
                   </div>
-                  <div className="text-right">
-                    <p className="text-sm font-medium text-gray-900">
+                  <div className="text-right bg-white/50 rounded-lg p-2">
+                    <p className="text-sm font-bold text-gray-900">
                       {violation.severity.toFixed(1)}/10
                     </p>
-                    <p className="text-sm font-medium text-gray-900">
+                    <p className="text-sm font-bold text-gray-900">
                       {(violation.confidence * 100).toFixed(0)}%
                     </p>
-                    <p className="text-xs text-gray-500">conf.</p>
+                    <p className="text-xs text-gray-600 font-medium">conf.</p>
                   </div>
                 </motion.div>
               ))}
@@ -217,12 +247,20 @@ const InteractionCard: React.FC<InteractionCardProps> = ({ interaction, onAction
               transition={{ staggerChildren: 0.1 }}
             >
               {interaction.agentActions
-                .filter((action, index, self) => 
-                  // Remove duplicate feedback agent entries
-                  !(action.agentName === 'FeedbackAgent' && 
-                    action.details === 'Feedback agent initialized and ready to collect user feedback' &&
-                    self.findIndex(a => a.agentName === 'FeedbackAgent' && a.action === 'log') !== index)
-                )
+                .reduce((unique: typeof interaction.agentActions, action) => {
+                  // Remove duplicates based on agent name and action type
+                  const isDuplicate = unique.some(existing => 
+                    existing.agentName === action.agentName && 
+                    existing.action === action.action &&
+                    existing.details === action.details
+                  );
+                  
+                  if (!isDuplicate) {
+                    unique.push(action);
+                  }
+                  
+                  return unique;
+                }, [])
                 .map((action, index) => (
                 <AgentBadge
                   key={index}

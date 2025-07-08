@@ -9,13 +9,6 @@ export class PolicyEnforcerAgent {
     const violations = await this.detectViolations(interaction);
     const actions: AgentAction[] = [];
 
-    // Always log that the policy enforcer processed the interaction
-    actions.push({
-      agentName: this.name,
-      action: 'log',
-      details: 'Policy enforcer scanned content for regulatory compliance violations',
-      timestamp: new Date()
-    });
 
     if (violations.length > 0) {
       // Update the interaction's violations array
