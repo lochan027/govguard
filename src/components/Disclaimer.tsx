@@ -118,7 +118,7 @@ const Disclaimer: React.FC = () => {
                 </div>
               </div>
 
-              <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg p-4">
+              <div className="bg-white/5 border border-amber-500/30 rounded-lg p-4">
                   <span>Regulatory Compliance</span>
                 <p className="text-sm text-amber-100">
                   This is a demonstration platform. Responses are AI-generated and should not be used for medical, legal, financial, or personal advice. 
