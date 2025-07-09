@@ -239,7 +239,7 @@ const InteractionCard: React.FC<InteractionCardProps> = ({ interaction, onAction
           </motion.button>
         </div>
 
-        {(interaction.status === 'pending' || interaction.status === 'blocked') && (
+        {interaction.status === 'pending' && (
           <div className="flex items-center space-x-2">
             <motion.button
               whileHover={{ scale: 1.05 }}
@@ -260,10 +260,19 @@ const InteractionCard: React.FC<InteractionCardProps> = ({ interaction, onAction
           </div>
         )}
         
-        {interaction.status === 'approved' && (
+        {(interaction.status === 'approved' || interaction.status === 'blocked') && (
           <div className="flex items-center space-x-2 text-green-600">
-            <CheckCircle className="h-4 w-4" />
-            <span className="text-sm font-medium">Approved</span>
+            {interaction.status === 'approved' ? (
+              <>
+                <CheckCircle className="h-4 w-4" />
+                <span className="text-sm font-medium">Approved</span>
+              </>
+            ) : (
+              <>
+                <XCircle className="h-4 w-4 text-red-600" />
+                <span className="text-sm font-medium text-red-600">Blocked</span>
+              </>
+            )}
           </div>
         )}
       </div>
