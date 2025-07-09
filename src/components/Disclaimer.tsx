@@ -118,12 +118,41 @@ const Disclaimer: React.FC = () => {
                 </div>
               </div>
 
-              <div className="bg-white/5 border border-amber-500/30 rounded-lg p-4">
-                  <span>Regulatory Compliance</span>
+              <div className="bg-white/5 backdrop-blur-sm border border-blue-400/30 rounded-lg p-4">
+                <h3 className="font-semibold text-blue-200 mb-2 flex items-center space-x-2">
+                  <span className="text-lg">🛡️</span>
+                  <span>Regulatory Compliance Framework</span>
+                </h3>
                 <p className="text-sm text-amber-100">
-                  This is a demonstration platform. Responses are AI-generated and should not be used for medical, legal, financial, or personal advice. 
                   Comprehensive compliance with GDPR, FISMA, EU AI Act, DSA, NIS2, ISO/IEC 42001, and IEEE Ethics Guidelines.
+                  This demonstration platform showcases enterprise-grade AI governance capabilities.
                 </p>
+                <div className="mt-3 grid grid-cols-2 md:grid-cols-4 gap-2 text-xs">
+                  <div className="bg-white/10 rounded px-2 py-1 text-center">
+                    <span className="font-medium text-blue-200">GDPR</span>
+                  </div>
+                  <div className="bg-white/10 rounded px-2 py-1 text-center">
+                    <span className="font-medium text-blue-200">FISMA</span>
+                  </div>
+                  <div className="bg-white/10 rounded px-2 py-1 text-center">
+                    <span className="font-medium text-blue-200">EU AI Act</span>
+                  </div>
+                  <div className="bg-white/10 rounded px-2 py-1 text-center">
+                    <span className="font-medium text-blue-200">DSA</span>
+                  </div>
+                  <div className="bg-white/10 rounded px-2 py-1 text-center">
+                    <span className="font-medium text-blue-200">NIS2</span>
+                  </div>
+                  <div className="bg-white/10 rounded px-2 py-1 text-center">
+                    <span className="font-medium text-blue-200">ISO 42001</span>
+                  </div>
+                  <div className="bg-white/10 rounded px-2 py-1 text-center">
+                    <span className="font-medium text-blue-200">IEEE Ethics</span>
+                  </div>
+                  <div className="bg-white/10 rounded px-2 py-1 text-center">
+                    <span className="font-medium text-blue-200">Enterprise</span>
+                  </div>
+                </div>
               </div>
             </motion.div>
           )}
