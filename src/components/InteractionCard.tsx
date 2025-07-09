@@ -245,7 +245,7 @@ const InteractionCard: React.FC<InteractionCardProps> = ({ interaction, onAction
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => onAction(interaction.id, 'approve')}
-              className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+              className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors font-medium"
             >
               Approve
             </motion.button>
@@ -253,10 +253,17 @@ const InteractionCard: React.FC<InteractionCardProps> = ({ interaction, onAction
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => onAction(interaction.id, 'block')}
-              className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+              className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors font-medium"
             >
               Block
             </motion.button>
+          </div>
+        )}
+        
+        {interaction.status === 'approved' && (
+          <div className="flex items-center space-x-2 text-green-600">
+            <CheckCircle className="h-4 w-4" />
+            <span className="text-sm font-medium">Approved</span>
           </div>
         )}
       </div>

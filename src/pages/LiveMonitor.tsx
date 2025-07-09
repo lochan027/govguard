@@ -78,54 +78,26 @@ const LiveMonitor: React.FC = () => {
       return;
     }
     
-    // Handle approve/block actions - update status and persist to backend
-    try {
-      // Update the interaction status in the backend
-      const updatedInteractions = await apiService.getInteractions();
-      const targetInteraction = updatedInteractions.find(i => i.id === id);
-      
-      if (targetInteraction) {
-        // Update the status
-        const newStatus = action === 'approve' ? 'approved' as const : 
-                         action === 'block' ? 'blocked' as const : targetInteraction.status;
-        
-        // Update in memory first for immediate UI feedback
-        setInteractions(prev => 
-          prev.map(interaction => 
-            interaction.id === id 
-              ? { ...interaction, status: newStatus }
-              : interaction
-          )
-        );
-        
-        // Show toast for status change
-        if (action === 'approve') {
-          toast.success('Interaction Approved', 'Content has been approved for use');
-        } else if (action === 'block') {
-          toast.error('Interaction Blocked', 'Content has been blocked due to violations');
-        }
-      }
-    } catch (error) {
-      console.error('Failed to update interaction status:', error);
-      toast.error('Update Failed', 'Unable to update interaction status');
-    }
-
-    setInteractions(prev => 
-      prev.map(interaction => 
-        interaction.id === id 
-          ? { 
-              ...interaction, 
-              status: action === 'approve' ? 'approved' as const : 
-                     action === 'block' ? 'blocked' as const : interaction.status
-            }
-          : interaction
-      )
-    );
-    
-    // Show toast for status change
+    // Handle approve/block actions
     if (action === 'approve') {
+      // Update status immediately for UI feedback
+      setInteractions(prev => 
+        prev.map(interaction => 
+          interaction.id === id 
+            ? { ...interaction, status: 'approved' as const }
+            : interaction
+        )
+      );
       toast.success('Interaction Approved', 'Content has been approved for use');
     } else if (action === 'block') {
+      // Update status immediately for UI feedback
+      setInteractions(prev => 
+        prev.map(interaction => 
+          interaction.id === id 
+            ? { ...interaction, status: 'blocked' as const }
+            : interaction
+        )
+      );
       toast.error('Interaction Blocked', 'Content has been blocked due to violations');
     }
   };
