@@ -109,7 +109,6 @@ const LiveMonitor: React.FC = () => {
       console.error('Failed to update interaction status:', error);
       toast.error('Update Failed', 'Unable to update interaction status');
     }
-  };
 
     setInteractions(prev => 
       prev.map(interaction => 
