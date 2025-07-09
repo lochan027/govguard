@@ -42,7 +42,7 @@ export class VerifierAgent {
           actions.push({
             agentName: this.name,
             action: 'verify',
-            details: `Content verified as accurate (confidence: ${(verificationResult.confidence * 100).toFixed(0)}%)`,
+            details: `Output verified as accurate (confidence: ${(verificationResult.confidence * 100).toFixed(0)}%)`,
             timestamp: new Date()
           });
         }
