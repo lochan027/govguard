@@ -15,7 +15,11 @@ const Disclaimer: React.FC = () => {
         <div className="flex items-center justify-between mb-4">
 
             <div className="bg-white/5 backdrop-blur-sm border border-amber-400/30 rounded-lg p-4">
-              
+              <h3 className="font-semibold text-amber-200 mb-2 flex items-center space-x-2">
+                
+              </h3>
+              <p className="text-sm text-amber-100">
+                
                 The live demo showcases the full functionality of our enterprise AI governance platform.
               </p>
             </div>
