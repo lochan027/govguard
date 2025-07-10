@@ -174,7 +174,11 @@
 
 **Lochan Acharya**
 - GitHub: [@lochan027](https://github.com/lochan027)
-- LinkedIn: [Lochan Acharya](https://linkedin.com/in/lochan-acharya)
+- LinkedIn: [Lochan Acharya](http://linkedin.com/in/lochanacharya13/)
+
+## 📝 Repository Status
+
+This repository is currently private during the hackathon period and will be made public after the hackathon concludes.
 
 ## 🙏 Acknowledgments
 
