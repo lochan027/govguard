@@ -197,6 +197,6 @@ For support, email lochanacharya0@gmail.com or create an issue on GitHub.
 
 **⭐ Star this repository if you find it helpful!**
 
-[Live Demo](https://multiguard.online/) • [Documentation](https://github.com/lochan027/govguard/wiki) • [Issues](https://github.com/lochan027/govguard/issues)
+[Live Demo](https://multiguard.online/) 
 
 </div>
