@@ -146,6 +146,12 @@ const Disclaimer: React.FC = () => {
                   <div className="bg-white/10 rounded px-2 py-1 text-center">
                     <span className="font-medium text-blue-200">ISO 42001</span>
                   </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Footer Credits */}
         <div className="flex items-center justify-between text-sm text-blue-200 pt-6 border-t border-white/10 mt-6">
           <div className="flex items-center space-x-4">
