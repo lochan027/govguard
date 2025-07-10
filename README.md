@@ -2,13 +2,12 @@
 
 [![Deploy Status](https://img.shields.io/badge/Deploy-Live-brightgreen)](https://govguard.netlify.app)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-blue)](https://github.com/lochan027/govguard)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 **Enterprise-grade AI safety and compliance platform with real-time governance, multi-agent architecture, and ultra-fast inference.**
 
 ## 🚀 Live Demo
 
-**🌐 [View Live Application](https://govguard.netlify.app)**
+**🌐 [View Live Application](https://multiguard.online/)**
 
 ## ✨ Features
 
@@ -171,10 +170,6 @@
 4. Push to branch (`git push origin feature/amazing-feature`)
 5. Open Pull Request
 
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 ## 👨‍💻 Author
 
 **Lochan Acharya**
@@ -198,6 +193,6 @@ For support, email lochan.acharya@example.com or create an issue on GitHub.
 
 **⭐ Star this repository if you find it helpful!**
 
-[Live Demo](https://govguard.netlify.app) • [Documentation](https://github.com/lochan027/govguard/wiki) • [Issues](https://github.com/lochan027/govguard/issues)
+[Live Demo](https://multiguard.online/) • [Documentation](https://github.com/lochan027/govguard/wiki) • [Issues](https://github.com/lochan027/govguard/issues)
 
 </div>
