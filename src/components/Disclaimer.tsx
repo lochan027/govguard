@@ -13,16 +13,6 @@ const Disclaimer: React.FC = () => {
       <div className="max-w-7xl mx-auto px-6 py-6">
         {/* Main Header */}
         <div className="flex items-center justify-between mb-4">
-
-            <div className="bg-white/5 backdrop-blur-sm border border-amber-400/30 rounded-lg p-4">
-              <h3 className="font-semibold text-amber-200 mb-2 flex items-center space-x-2">
-                
-              </h3>
-              <p className="text-sm text-amber-100">
-                
-                The live demo showcases the full functionality of our enterprise AI governance platform.
-              </p>
-            </div>
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-3">
               <div className="relative">
@@ -140,17 +130,6 @@ const Disclaimer: React.FC = () => {
                 <div className="mt-3 grid grid-cols-2 md:grid-cols-4 gap-2 text-xs">
                   <div className="bg-white/10 rounded px-2 py-1 text-center">
                     <span className="font-medium text-blue-200">GDPR</span>
-            <div className="bg-white/5 backdrop-blur-sm border border-amber-400/30 rounded-lg p-4">
-              <h3 className="font-semibold text-amber-200 mb-2 flex items-center space-x-2">
-                <span className="text-lg">🏆</span>
-                <span>Hackathon Project</span>
-              </h3>
-              <p className="text-sm text-amber-100">
-                This repository is currently private during the hackathon period and will be made public after the hackathon concludes. 
-                The live demo showcases the full functionality of our enterprise AI governance platform.
-              </p>
-            </div>
-
                   </div>
                   <div className="bg-white/10 rounded px-2 py-1 text-center">
                     <span className="font-medium text-blue-200">FISMA</span>
@@ -186,6 +165,29 @@ const Disclaimer: React.FC = () => {
             <span className="text-white/40">•</span>
             <span>Built with React, TypeScript, Groq & Firebase</span>
           </div>
+          <div className="flex items-center space-x-2">
+            <span>Made with</span>
+            <motion.span
+              animate={{ scale: [1, 1.2, 1] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              className="text-red-400"
+            >
+              ❤️
+            </motion.span>
+            <span>for AI Safety</span>
+          </div>
+        </div>
+
+        {/* Hackathon Project Notice */}
+        <div className="bg-white/5 backdrop-blur-sm border border-amber-400/30 rounded-lg p-4 mb-4">
+          <h3 className="font-semibold text-amber-200 mb-2 flex items-center space-x-2">
+            <span className="text-lg">🏆</span>
+            <span>Hackathon Project</span>
+          </h3>
+          <p className="text-sm text-amber-100">
+            This repository is currently private during the hackathon period and will be made public after the hackathon concludes. 
+            The live demo showcases the full functionality of our enterprise AI governance platform.
+          </p>
         </div>
       </div>
     </div>
