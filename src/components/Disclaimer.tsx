@@ -146,20 +146,8 @@ const Disclaimer: React.FC = () => {
                   <div className="bg-white/10 rounded px-2 py-1 text-center">
                     <span className="font-medium text-blue-200">ISO 42001</span>
                   </div>
-                  <div className="bg-white/10 rounded px-2 py-1 text-center">
-                    <span className="font-medium text-blue-200">IEEE Ethics</span>
-                  </div>
-                  <div className="bg-white/10 rounded px-2 py-1 text-center">
-                    <span className="font-medium text-blue-200">Enterprise</span>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
         {/* Footer Credits */}
-        <div className="flex items-center justify-between text-sm text-blue-200 pt-4 border-t border-white/10">
+        <div className="flex items-center justify-between text-sm text-blue-200 pt-6 border-t border-white/10 mt-6">
           <div className="flex items-center space-x-4">
             <span>Created by <strong className="text-white">Lochan Acharya</strong></span>
             <span className="text-white/40">•</span>
@@ -177,6 +165,28 @@ const Disclaimer: React.FC = () => {
             <span>for AI Safety</span>
           </div>
         </div>
+
+        {/* Hackathon Project Notice - Only in expanded view */}
+        <AnimatePresence>
+          {isExpanded && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3, delay: 0.2 }}
+              className="mt-4 bg-white/5 backdrop-blur-sm border border-amber-400/30 rounded-lg p-4"
+            >
+              <h3 className="font-semibold text-amber-200 mb-2 flex items-center space-x-2">
+                <span className="text-lg">🏆</span>
+                <span>Hackathon Project</span>
+              </h3>
+              <p className="text-sm text-amber-100">
+                This repository is currently private during the hackathon period and will be made public after the hackathon concludes. 
+                The live demo showcases the full functionality of our enterprise AI governance platform.
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Hackathon Project Notice */}
         <div className="bg-white/5 backdrop-blur-sm border border-amber-400/30 rounded-lg p-4 mb-4">
