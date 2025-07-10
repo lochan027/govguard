@@ -18,9 +18,10 @@ const Disclaimer: React.FC = () => {
               <h3 className="font-semibold text-amber-200 mb-2 flex items-center space-x-2">
                 <span className="text-lg">🏆</span>
                 <span>Hackathon Project</span>
+                This repository is currently private during the hackathon period and will be made public after the hackathon concludes. 
               </h3>
               <p className="text-sm text-amber-100">
-                This repository is currently private during the hackathon period and will be made public after the hackathon concludes. 
+                
                 The live demo showcases the full functionality of our enterprise AI governance platform.
               </p>
             </div>
