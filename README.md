@@ -189,7 +189,7 @@ This repository is currently private during the hackathon period and will be mad
 
 ## 📞 Support
 
-For support, email lochan.acharya@example.com or create an issue on GitHub.
+For support, email lochanacharya0@gmail.com or create an issue on GitHub.
 
 ---
 
