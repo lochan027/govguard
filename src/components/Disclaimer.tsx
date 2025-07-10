@@ -130,6 +130,17 @@ const Disclaimer: React.FC = () => {
                 <div className="mt-3 grid grid-cols-2 md:grid-cols-4 gap-2 text-xs">
                   <div className="bg-white/10 rounded px-2 py-1 text-center">
                     <span className="font-medium text-blue-200">GDPR</span>
+            <div className="bg-white/5 backdrop-blur-sm border border-amber-400/30 rounded-lg p-4">
+              <h3 className="font-semibold text-amber-200 mb-2 flex items-center space-x-2">
+                <span className="text-lg">🏆</span>
+                <span>Hackathon Project</span>
+              </h3>
+              <p className="text-sm text-amber-100">
+                This repository is currently private during the hackathon period and will be made public after the hackathon concludes. 
+                The live demo showcases the full functionality of our enterprise AI governance platform.
+              </p>
+            </div>
+
                   </div>
                   <div className="bg-white/10 rounded px-2 py-1 text-center">
                     <span className="font-medium text-blue-200">FISMA</span>
